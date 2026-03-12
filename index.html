@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NYT Cooking</title>
+    
+    <!-- Google Fonts for NYT style typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Inter:wght@400;600;800;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS VARIABLES */
+        :root {
+            --text-main: #121212;
+            --text-light: #555555;
+            --nyt-red: #df322b;
+            --bg-color: #ffffff;
+            --border-color: #e2e2e2;
+            --font-serif: 'Frank Ruhl Libre', serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-gothic: 'UnifrakturMaguntia', cursive;
+        }
+
+        /* RESET & BASE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: var(--font-serif);
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            line-height: 1.6;
+            font-size: 18px;
+            overflow-x: hidden;
+        }
+        a {
+            color: var(--text-main);
+            text-decoration: underline;
+            text-decoration-color: var(--border-color);
+            text-underline-offset: 3px;
+        }
+        a:hover {
+            color: var(--nyt-red);
+            text-decoration-color: var(--nyt-red);
+        }
+
+        /* HEADER */
+        .site-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            z-index: 100;
+        }
+        .logo-container {
+            display: flex;
+            align-items: baseline;
+            text-decoration: none;
+            color: var(--text-main);
+            gap: 6px;
+        }
+        .logo-container:hover {
+            color: var(--text-main);
+            text-decoration: none;
+        }
+        .logo-n {
+            font-family: var(--font-gothic);
+            font-size: 32px;
+            line-height: 1;
+            letter-spacing: 1px;
+        }
+        .logo-cooking {
+            font-family: var(--font-sans);
+            font-weight: 900;
+            font-size: 20px;
+            letter-spacing: -0.8px;
+        }
+
+        /* MAIN LAYOUT */
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+        }
+
+        /* HERO IMAGE */
+        .hero-image-container {
+            margin: 0 -20px 25px -20px; /* Edge-to-edge on mobile */
+        }
+        .hero-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            max-height: 450px;
+        }
+
+        /* RECIPE INFO */
+        .recipe-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+        .kicker {
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--nyt-red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        .recipe-title {
+            font-size: clamp(32px, 8vw, 46px); /* Fluid size for mobile */
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+        .author-line {
+            font-family: var(--font-sans);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .author-line a {
+            text-decoration: none;
+        }
+        .recipe-description {
+            font-size: clamp(18px, 5vw, 20px);
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+        }
+        .ratings-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .stars-container {
+            display: flex;
+            gap: 2px;
+        }
+        .star-icon {
+            width: 18px;
+            height: 18px;
+            fill: var(--nyt-red);
+        }
+        .time-yield {
+            font-family: var(--font-sans);
+            font-size: 14px;
+            color: var(--text-light);
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            max-width: 450px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* DIVIDER */
+        .think-divider {
+            border: none;
+            border-top: 3px solid var(--text-main);
+            border-bottom: 1px solid var(--text-main);
+            height: 6px;
+            margin: 30px 0;
+        }
+
+        /* RECIPE BODY */
+        .recipe-body {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        /* DESKTOP GRID */
+        @media (min-width: 768px) {
+            .hero-image-container {
+                margin: 40px 0 40px 0;
+            }
+            .recipe-body {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                gap: 60px;
+            }
+            .headnote {
+                grid-column: 1 / -1;
+            }
+            .recipe-ingredients {
+                grid-column: 1 / 2;
+            }
+            .recipe-preparation {
+                grid-column: 2 / 3;
+            }
+            .bottom-section {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .headnote {
+            font-size: 19px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        /* INGREDIENTS */
+        .section-header {
+            font-family: var(--font-sans);
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        .ingredients-group-title {
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin: 25px 0 15px 0;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+        }
+        .ingredient-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            cursor: pointer;
+            font-size: 17px;
+            /* Improved touch target for mobile */
+            padding: 2px 0; 
+        }
+        .ingredient-item input {
+            margin-top: 6px;
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--nyt-red);
+            flex-shrink: 0;
+        }
+        .svg-cross {
+            width: 18px;
+            height: 18px;
+            fill: #999;
+            margin-top: 5px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        /* PREPARATION */
+        .prep-step {
+            margin-bottom: 25px;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        .step-number {
+            display: block;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        /* TIPS BOX */
+        .tips-box {
+            background-color: #fdfaf6;
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            margin: 40px 0;
+        }
+        .tips-header {
+            font-family: var(--font-sans);
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--nyt-red);
+        }
+        .tip-item {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+        .tip-label {
+            font-weight: 700;
+        }
+
+        /* RECIPE NOTES */
+        .recipe-notes p {
+            margin-bottom: 15px;
+            color: var(--text-light);
+            font-size: 17px;
+        }
+
+        /* RELATED RECIPES */
+        .related-recipes-wrapper {
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 40px;
+        }
+        .related-recipe {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        .related-recipe:last-child {
+            border-bottom: none;
+        }
+        .related-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .related-meta {
+            font-family: var(--font-sans);
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        .related-subtitle {
+            font-family: var(--font-sans);
+            font-weight: 800;
+            font-size: 13px;
+            text-transform: uppercase;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--text-main);
+        }
+        .related-list {
+            padding-left: 20px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .related-list li {
+            margin-bottom: 10px;
+        }
+        .related-tip {
+            font-style: italic;
+            background: #f4f4f4;
+            padding: 15px;
+            font-size: 15px;
+            border-left: 3px solid var(--nyt-red);
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <a href="#" class="logo-container">
+            <!-- Text 'NYT' in Gothic, 'Cooking' in bold Sans -->
+            <span class="logo-n">N |</span>
+            <span class="logo-cooking">Cooking</span>
+        </a>
+    </header>
+
+    <main class="main-content">
+        <!-- HERO IMAGE (Edge to Edge on mobile) -->
+        <div class="hero-image-container">
+            <!-- Responsive placeholder image mimicking a warm, romantic late-night text vibe -->
+            <img src="https://i.postimg.cc/k5wMS7hw/IMG-9211.jpg" alt=" Conversations">
+        </div>
+
+        <!-- RECIPE INFO (Above Divider) -->
+        <div class="recipe-info">
+            <div class="kicker">Recipe of the Day</div>
+            <h1 class="recipe-title">How to Make Her Happy (State Lines Edition)</h1>
+            
+            <div class="author-line">
+                <strong>By <a href="#">Niv</a></strong>
+            </div>
+            
+            <p class="recipe-description">
+                A highly guarded, fiercely tested recipe for sustaining the most brilliant girl you know across states. Best served daily via text, voice notes, and the occasional glorious FaceTime, with a side of witty banter and zero bullshit.
+            </p>
+            
+            <div class="ratings-row">
+                <div class="stars-container">
+                    <!-- Clean SVG stars -->
+                    <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                </div>
+                <span>1,114</span>
+            </div>
+            
+            <div class="time-yield">
+                <strong>Yield:</strong> 1 radiant Aaradhya.<br>
+                <strong>Distance:</strong> Several states apart.<br>
+                <strong>Time:</strong> 5 minutes of prep, plus a lifetime of delightful digital maintenance until the gap closes.
+            </div>
+        </div>
+
+        <!-- THICK DIVIDER -->
+        <hr class="thick-divider">
+
+        <!-- RECIPE BODY (CSS Grid on Desktop, Column on Mobile) -->
+        <div class="recipe-body">
+            
+            <div class="headnote">
+                After months of rigorous R&D—and placing entirely too much trust in our respective cellular networks—I’ve perfected the ultimate recipe for Aaradhya. Forget physical truffles and caviar; this girl operates on a complex blend of searing intellect, a poetic soul, and carbonated beverages. When you live states away and have only FaceTimed once (a legendary occasion, for the record), the dish requires precision, elite reading comprehension, and knowing exactly when to deploy a DoorDash surprise to her exact coordinates.
+            </div>
+
+            <!-- LEFT COLUMN: INGREDIENTS -->
+            <div class="recipe-ingredients">
+                <div class="section-header">Ingredients</div>
+                
+                <div class="ingredients-group-title">For the Virtual Base</div>
+                <label class="ingredient-item">
+                    <input type="checkbox">
+                    <span class="ingredient-text">1 heaping cup of undivided attention (replying in your head and forgetting to hit send does NOT count)</span>
+                </label>
+                <label class="ingredient-item">
+                    <input type="checkbox">
+                    <span class="ingredient-text">2 tablespoons of elite reading comprehension (decoding the exact emotional tone of a single "okay.")</span>
+                </label>
+                <label class="ingredient-item">
+                    <input type="checkbox">
+                    <span class="ingredient-text">3 generously packed teaspoons of voice note banter (she will intellectually outmaneuver you—just accept it)</span>
+                </label>
+                <label class="ingredient-item">
+                    <input type="checkbox">
+                    <span class="ingredient-text">1 rare, perfectly timed FaceTime call (to be savored like an expensive vintage wine)</span>
+                </label>
+
+                <div class="ingredients-group-title">The BlinkIt Deployments</div>
+                <label class="ingredient-item">
+                    <input type="checkbox">
+                    <span class="ingredient-text">1 ice-cold Diet Coke, ordered remotely to her address (deploy upon signs of deep study fatigue)</span>
+                </label>
+                <label class="ingredient-item">
+                    <input type="checkbox">
+                    <span class="ingredient-text">1 steaming plate of momos, or a perfectly trashy burger (to celebrate her wins)</span>
+                </label>
+                <label class="ingredient-item">
+                    <input type="checkbox">
+                    <span class="ingredient-text">1 bowl of Wai Wai (the ultimate cure for existential dread)</span>
+                </label>
+
+                <div class="ingredients-group-title">What NOT to Include</div>
+                <div class="ingredient-item" style="cursor: default;">
+                    <svg class="svg-cross" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    <span class="ingredient-text" style="color: #666;">Absolutely no expectations for her to be simple. She is a poet and a scientist; she contains multitudes.</span>
+                </div>
+                <div class="ingredient-item" style="cursor: default;">
+                    <svg class="svg-cross" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    <span class="ingredient-text" style="color: #666;">Generic "I miss you" texts with no substance. Be specific. Tell her exactly what you're missing.</span>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: PREPARATION (METHOD) -->
+            <div class="recipe-preparation">
+                <div class="section-header">Preparation (The Method)</div>
+
+                <div class="prep-step">
+                    <span class="step-number">Step 1</span>
+                    <strong>Clear the digital counter.</strong> When you're texting or calling, actually be there. Don't half-watch a movie in the background. She's a genius; she can sense distracted typing from hundreds of miles away. 
+                </div>
+
+                <div class="prep-step">
+                    <span class="step-number">Step 2</span>
+                    <strong>Simmer the conversation.</strong> Let her switch wildly from cellular biology to expressing her love to you. Your job is to keep up, ask the right questions, and send the absolute perfect reaction meme when words fail.
+                </div>
+
+                <div class="prep-step">
+                    <span class="step-number">Step 3</span>
+                    <strong>The Art of the Remote Garnish.</strong> You can't physically hand her a drink, so you must become a master of digital logistics. A surprise delivery of ice cream hitting her doorstep right when she craves it is Michelin-star romance.
+                </div>
+
+                <div class="prep-step">
+                    <span class="step-number">Step 4</span>
+                    <strong>Fold in the contradictions.</strong> Gently mix her ruthless ambition with her wildly soft heart. Remind her that it's okay to be both. She doesn't have to be "on" for you; she just has to be herself.
+                </div>
+
+                <div class="prep-step">
+                    <span class="step-number">Step 5</span>
+                    <strong>Plate for the future.</strong> Long distance is just an extended marinating process. Keep the end-goal in sight. Remind her often that the state lines are temporary, but she is permanent. Garnish every night with a goodnight text she can wake up to.
+                </div>
+
+                <!-- TIPS BOX -->
+                <div class="tips-box">
+                    <div class="tips-header">Tips from the Kitchen</div>
+                    <div class="tip-item">
+                        <span class="tip-label">Patience is Key:</span> We've only FaceTimed once, which makes the moments we *do* connect even sweeter. Quality over quantity. Let the tension build; it makes the dish better.
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-label">Substitutions:</span> There is absolutely NO substitution for the Diet Coke. Don't even try ordering her a Pepsi. It's a dealbreaker.
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTTOM FULL-WIDTH SECTION -->
+            <div class="bottom-section">
+                <!-- RECIPE NOTES -->
+                <div class="section-header">Recipe Notes</div>
+                <div class="recipe-notes">
+                    <p>Early iterations of this recipe involved me trying way too hard to orchestrate massive, impressive gestures. Turns out, she didn't need a showman; she just needed <em>me</em>, consistently showing up in her notifications and her life.</p>
+                    <p>The real breakthrough happened when I realized I don't need to overcompensate for the miles between our states. I just need to create a safe space for her to be exactly who she is. I'm just here to be the very lucky sous-chef in her spectacular life, no matter the geography.</p>
+                </div>
+
+                <!-- RELATED RECIPES -->
+                <div class="related-recipes-wrapper">
+                    <div class="section-header" style="color: var(--nyt-red); font-size: 14px; text-transform: uppercase;">More Essential Guides</div>
+                    
+                    <!-- Related 1 -->
+                    <div class="related-recipe">
+                        <h2 class="related-title">How to Make Her Feel Loved (Across State Lines)</h2>
+                        <div class="related-meta">Yield: Deep security • Active time: 5 minutes of focused texting</div>
+                        
+                        <div class="related-subtitle">Key Ingredients</div>
+                        <ul class="related-list">
+                            <li>Hyper-specific compliments ("Your brain is terrifyingly beautiful")</li>
+                            <li>Remembering that random event she muttered about last Tuesday</li>
+                            <li>Sincere, terrifyingly honest vulnerability over voice notes</li>
+                        </ul>
+
+                        <div class="related-subtitle">Method</div>
+                        <ul class="related-list" style="list-style-type: decimal;">
+                            <li>Notice the little things she texts you. Write them down if you have to.</li>
+                            <li>Remind her she's brilliant, not just beautiful.</li>
+                            <li>Follow through. Talk is cheap, but consistency across timezones is gold.</li>
+                        </ul>
+                        <div class="related-tip">Warning: She's a genius, so she can spot an automated "good morning" text from a mile away. Sincerity is your only option.</div>
+                    </div>
+
+                    <!-- Related 2 -->
+                    <div class="related-recipe">
+                        <h2 class="related-title">How to Help Her Relax (Via Screen)</h2>
+                        <div class="related-meta">Time: Varies wildly based on her current stubbornness level</div>
+                        
+                        <div class="related-subtitle">Key Ingredients</div>
+                        <ul class="related-list">
+                            <li>Firm permission to close her laptop</li>
+                            <li>An order of comfort food sent to her dorm/apartment</li>
+                            <li>A perfectly timed, distraction-free phone call</li>
+                        </ul>
+
+                        <div class="related-subtitle">Method</div>
+                        <ul class="related-list" style="list-style-type: decimal;">
+                            <li>Gently but firmly text her that the world won't end if she takes a nap.</li>
+                            <li>Tell her to put the phone on DND (except for you, obviously).</li>
+                            <li>Create a 100% guilt-free, low-stakes digital environment.</li>
+                        </ul>
+                        <div class="related-tip">High-achievers are notoriously bad at resting. You can't physically take the textbook away, so you have to use logic, love, and food bribery.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
